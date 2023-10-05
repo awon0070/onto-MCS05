@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<head>
+    <title>My Website</title>
+    <style>
+        *,
+        html {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: rgb(236, 152, 42);
+        }
+
+        .center {
+            width: 100%;
+            height: 50%;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            text-align: center;
+        }
+        .user-input {
+            margin-top: 20px;
+            font-size: 24px;
+            padding: 10px;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 144px;
+        }
+
+        p {
+            font-size: 64px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="form.html">Form</a></li> <!-- Link to the new HTML file -->
+        </ul>
+    </nav>
+    <div class="center">
+        <h1>Hello Again!</h1>
+        <p>This is served from a file</p>
+        
+            <input type="text" id="user-input" placeholder="Enter text">
+            <button id="saveButton">Save Input</button>
+            <button id="clearButton">Clear Input</button>
+            <button type="submit">Submit</button>
+            <form id="dataForm">
+                <label for="text">Text:</label>
+                <input type="text" id="text" name="text" required>
+                <button type="submit">Submit</button>
+                <div id="result"></div>
+            </form>
+            <p id="output"></p>
+        
+            
+       
+
+    </div>
+ 
+
+    <script>
+        console.log("Script loaded"); // Check if the script is loaded
+
+        // Wait for the DOM to fully load before accessing these elements
+        document.addEventListener("DOMContentLoaded", function () {
+            const clearButton = document.getElementById("clearButton");
+            const userInput = document.getElementById("user-input");
+            const saveButton = document.getElementById("saveButton");
+
+            clearButton.addEventListener("click", function () {
+                console.log("Clear button clicked");
+                userInput.value = "";
+            });
+
+            saveButton.addEventListener("click", function () {
+                console.log("Save button clicked");
+                const Text = userInput.value;
+                console.log(Text);
+                userInput.value = "";
+            });
+
+            const df = document.getElementById("dataForm");
+
+            df.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const Text = df.text.value;
+                console.log(Text);
+
+                const str={text: df.text.value}
+                const jsonString = JSON.stringify(str);
+                console.log(str);
+                console.log(typeof(str));
+                fetch('http://10.156.90.225:8080/api/saveData', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: jsonString, // Use the jsonString variable here
+    mode: 'cors',
+    credentials: 'include',
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    console.log(type(data.message));
+})
+.catch(error => {
+    //console.error('Error:', error);
+});
+                
+               
+        });});
+       
+
+        
+
+        
+
+    </script>
+</body>
+</html>
+
