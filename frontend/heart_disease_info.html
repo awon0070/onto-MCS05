@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Info</title>
+    <link rel="stylesheet" href="real_main.css"> 
+    <style>
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Align items horizontally */
+            align-items: center; /* Align items vertically */
+            background: #ffeaea;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            background: #ffeaea;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .navbar li {
+            margin-right: 15px;
+            margin: 0 10px; /* Add margin to separate links */
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            display: block;
+            padding: 25px 0; /* Adjusted padding for center alignment */
+            font-size: 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+            width: 100%; /* Added this line to make links full width */
+        }
+
+        /* Position the Sign In link at the right */
+        .navbar .signin-link {
+            margin-right: 20px; 
+        }
+
+        .info-page {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start; /* Align content to the left */
+            background-color: #ffeaea;
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            padding-left: 50px; 
+        }
+
+        /* Style for disease boxes */
+        .disease-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .disease-box:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Style for the pop-up box */
+        .popup-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 9999;
+        }
+
+        /* Close button style */
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            background-color: transparent;
+            border: none;
+            border-radius: 50%; /* Make the button circular */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red; /* Set initial symbol color to red */
+        }
+        /* Add any new CSS styles for hierarchical list here */
+        .disease-box ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        /* Add any new CSS styles for pop-up boxes here */
+        .popup-box ul {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+<ul>
+    <li><a href="real_main.html" target="_top">Home</a></li>
+    <li><a href="javascript:void(0);" onclick="checkAccess()" target="_top">Patients Medical Records</a></li>
+    <!-- <li><a href="chatbotUI.html" target="_top">Chat</a></li> -->
+    <li><a href="heart_disease_info.html" target="_top">Heart Disease Info</a></li>
+    <li><a href="aboutUs.html" target="_top">About Us</a></li>
+</ul>
+<div class="signin-link">
+    <a href="sign_in.html" target="_top">Sign In</a>
+</div>
+
+</div>
+
+<div id="myModal" class="w3-modal">
+<div class="w3-modal-content w3-animate-top w3-card-4">
+    <header class="w3-container w3-red"> 
+        <span onclick="closeModal()" class="w3-button-close w3-display-topright">&times;</span>
+        <h3>Access Restricted</h3>
+    </header>
+    <div class="w3-container">
+        <p>Access to the patient's record is presently restricted due to the absence of a signed-in session. Authorization to view the record necessitates an active. <a href="sign_in.html" style="color: blue; text-decoration: underline;">Sign In</a></p>
+    </div>
+</div>
+</div>
+
+<!-- Search Bar and Disease Types -->
+<div class="info-page">
+    <div class="w3-row-padding w3-padding-64 w3-container custom-search">
+        <div class="w3-content">
+            <div class="w3-twothird">
+                <h1>Heart Disease Information</h1>
+                <p>Search for a type of heart disease or symptom:</p>
+                <form class="w3-container" id="search-form">
+                    <input class="w3-input w3-border" type="text" placeholder="Search..." id="search-input">
+                    <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
+                </form>
+                <h2>Heart Disease Types</h2>
+                <ul class="w3-ul" id="disease-types-list">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JavaScript -->
+<script>
+    // Fetch disease types from the .owl file and populate the list
+    fetch('disease-types.owl')
+        .then(response => response.text())
+        .then(data => {
+            const diseaseTypesList = document.getElementById('disease-types-list');
+            const diseaseTypes = data.split('\n').filter(type => type.trim() !== '');
+            
+            diseaseTypes.forEach(type => {
+                const listItem = document.createElement('li');
+                listItem.textContent = type;
+                listItem.classList.add('disease-link');
+                listItem.dataset.disease = type.toLowerCase().replace(/\s/g, '-');
+                listItem.addEventListener('click', handleDiseaseClick);
+                diseaseTypesList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error('Error fetching disease types:', error));
+
+    // Handle disease type click
+    function handleDiseaseClick(event) {
+        const selectedDisease = event.target.dataset.disease;
+        // Use the selected disease to fetch and display relevant information
+        // For now, let's just log the selected disease to the console
+        console.log('Selected Disease:', selectedDisease);
+    }
+
+    
+    const diseasesData = [
+            {
+                name: "Ankyrin-B-related Cardiac Arrhythmia",
+                definition: "A heart disease characterized by a broad spectrum of cardiac arrhythmias including; bradycardia, sinus arrhythmia, delayed conduction/conduction block, idiopathic ventricular fibrillation, and catecholaminergic polymorphic ventricular tachycardia that has_material_basis_in heterozygous mutation in ANK2 on chromosome 4q25-q26.",
+                symptoms: "Cardiac Arrest, Syncope",
+            },
+            {
+                name: "Atrial Heart Septal Defect",
+                definition: "A heart septal defect located_in in the septum that separates the two atria of the heart.",
+                symptoms: "Arrhythmia, Breathing problems, clubbing of fingers, cyanosis of fingers, Cyanosis, Delayed Milestones, Fatigue, Palpitation, Pulmonary Hypertension, Undiagnosed Cardia Murmur",
+            },
+            {
+                name: "Atrioventricular Septal Defect",
+                definition: "A congenital heart septal defect characterized by an abnormal or inadequate fusion of the superior and inferior endocardial cushions with the mid portion of the atrial septum and the muscular portion of the ventricular septum, thus allowing extra blood to circulate the lungs.",
+                symptoms: "Cyanosis, Dyspnea, Rapid Respiration",
+            },
+            {
+                name: "Autoimmune Cardiomyopathy",
+                definition: "An autoimmune disease of cardiovascular system that is characterized by deterioration of the function of the heart muscle.",
+                symptoms: "Arrhythmia, Breathing Problems, Chest Discomfort, Dizziness, Fatigue, Palpitation, Swelling Symptom, Undiagnosed Cardiac Murmur",
+            },
+            {
+                name: "Alcoholic Cardiomyopathy",
+                definition: "",
+                symptoms: "Breathing Problems, Chest Pain, Sizziness, Edema, Fatigue, Weakness",
+            },
+            {
+                name: "Fiedler's Myocarditis",
+                definition: "",
+                symptoms: "Arrhythmia, Breathing problem, Chest Pain, Fatigue, Myocarditis",
+            },
+            {
+                name: "Septic Myocarditis",
+                definition: "An acute myocarditis that is characterized by an underlying infectious insult to the myocardium that induces acute inflammation.",
+                symptoms: "Arrhythmia, Chest Pain, Confusion, Dyspnea, Fatigue, Fever, Joint Pain, Low Blood Pressure, Muschle Ache, Myocarditis, Nausea, Vomiting",
+            },
+            {
+                name: "Toxic Myocarditis",
+                definition: "An acute myocarditis that is characterized by an underlying toxin insult to the myocardium that induces acute inflammation.",
+                symptoms: "Chest Discomfort, Fatigue, Myocarditis, Nausea, Palpitation, Vomiting",
+            },
+            {
+                name: "Interstitial Myocarditis",
+                definition: "",
+                symptoms: "Chest Discomfort, Edema, Fatigue, Mild Fever, Palpitation, Weight Gain ",
+            },
+            {
+                name: "Rheumatic Myocarditis",
+                definition: "",
+                symptoms: "Streptococcus, Chest Pain, Inflammation, Joint Pain, Palpitation ",
+            },
+            {
+                name: "Arrhythmogenic Right Ventricular Cardiomyopathy",
+                definition: "An intrinsic cardiomyopathy that is characterized by hypokinetic areas involving the free wall of the right ventricle, with fibrofatty replacement of the right ventricular myocardium, with associated arrhythmias originating in the right ventricle.",
+                symptoms: "Arrhythmia, Breathing Problems, Cardiac Arrest, Chest Pain, Fatigue, Palpitation, Swelling Symptom, Suncoope, Undiagnosed Cardiac Murmur",
+            },
+            {
+                name: "Dilated cardiomyopathy",
+                definition: "An intrinsic cardiomyopathy that is characterized by an an enlarged heart and damage to the myocardium causing the heart to pump blood inefficiently.",
+                symptoms: "Breathing Problems, Cardiac Arrest, Chest Discomfort, Cough, Sizziness, Dyspnea, Edema, Fatigue, Palpitation, Swelling Symptom, Weight Gain",
+            },
+            {
+                name: "X-linked dilated cardiomyopathy",
+                definition: "A dilated cardiomyopathy that has_material_basis_in mutation in the gene encoding dystrophin (DMD) on chromosome Xp21, without skeletal muscle weakness or wasting.",
+                symptoms: "Chest Pain, Fatigue, Lightheadedness, Palpitation, Weakness",
+            },
+            {
+                name: "Peripartum cardiomyopathy",
+                definition: "A dilated cardiomyopathy that is characterized by a weakness of the heart muscle that begins sometime during the final month of pregnancy through about five months after delivery.",
+                symptoms: "Muscle Weakness, Dyspnea, Edema, Fatigue, Arrhythmia, Chest Pain, Cough, Abdominal Discomfort",
+            },
+            {
+                name: "Hypertrophic cardiomyopathy",
+                definition: "An intrinsic cardiomyopathy that is characterized by abnormal thickening (hypertrophy) of the heart without any obvious cause.",
+                symptoms: "Chest Pain, Edema, Fatigue, Lightheadedness, Palpitation, Weakness, Undiagnosed Cardiac Murmur, Weakness",
+            },
+            {
+                name: "Infantile hypertrophic cardiomyopathy",
+                definition: "A hypertrophic cardiomyopathy characterized by isolated hypertrophic cardiomyopathy and congestive heart failure that has_material_basis_in mutation in the overlapping mitochondrial genes MTATP6 and MTATP8.",
+                symptoms: "Breathing Problem, Change in Skin Color, Failure to thrive, Feeding Difficulties and Mismanagement, Irritability, Sweaty, Undiagnosed Cardiac Murmur",
+            },
+            {
+                name: "Long QT syndrome",
+                definition: "An autosomal genetic disease that is characterized by delayed repolarization of the heart following a heartbeat increases the risk of episodes of torsade de pointes (TDP, a form of irregular heartbeat that originates from the ventricles).",
+                symptoms: "Arrhythmia, Cardiac Arrest, Palpitation, Seizure, Syncope",
+            },
+            {
+                name: "Andersen-Tawil syndrome",
+                definition: "A long QT syndrome that has_material_basis_in autosomal dominant inheritance of a mutation in the KCNJ2 gene which disrupts the rhythm of the heart's lower chambers (ventricular arrhythmia) and results_in an unusually small lower jaw (micrognathia), low-set ears, and an abnormal curvature of the fingers called clinodactyly.",
+                symptoms: "Arrhythmia",
+            },
+            {
+                name: "Jervell-Lange Nielsen syndrome",
+                definition: "",
+                symptoms: "Cardiac Arrest, Prolonged Fever, Seizure, Syncope",
+            },
+            {
+                name: "Restrictive cardiomyopathy",
+                definition: "An intrinsic cardiomyopathy characterized by impaired ventricular filling, with normal or decreased diastolic volume of either or both ventricles typically resulting from increased stiffness of the myocardium.",
+                symptoms: "Chest Discomfort, Dyspnea, Edema, Fatigue, Palpitaion, Syncope, Weakness, Wheezing",
+            },
+            {
+                name: "Loeffler endocarditis",
+                definition: "A restrictive cardiomyopathy that affects the endocardium and occurs with white blood cell proliferation, specifically of eosinophils.",
+                symptoms: "Chest Pain, Endocarditis,, Fatigue, Fever, Palpitation, Undiagnosed Cardiac Murmur",
+            },
+            {
+                name: "Endomyocardial fibrosis",
+                definition: "",
+                symptoms: "Chest Pain, Dyspnea, Edema,, Fatigue, Palpitation, Weakness",
+            },
+            {
+                name: "Congenital heart disease",
+                definition: "",
+                symptoms: "Abnormality of prenatal development or birth",
+            },
+            {
+                name: "Dextro-looped transposition of the great arteries",
+                definition: "A congenital heart disease characterized by complete inversion of the great vessels where the aorta incorrectly arises from the right ventricle and the pulmonary artery incorrectly arises from the left ventricle.",
+                symptoms: "clubbing of fingers, cyanosis, fatigue, tachypnea",
+            },
+            {
+                name: "Ventricular septal defect",
+                definition: "A heart septal defect characterized by an opening in the interventricular septum, causing a shunt between ventricles.",
+                symptoms: "clubbing of fingers, cyanosis, fatigue, tachypnea, growth delay, respiratory syncytial virus infectious disease, tachypnea, undiagnosed cardiac murmur, weight loss ",
+            },
+            {
+                name: "Hypoplastic left heart syndrome",
+                definition: "A congenital heart disease characterized by abnormal development of the left-sided structures of the heart.",
+                symptoms: "Cold clammy skin, cyanosis, lethargy",
+            },
+            {
+                name: "Hypoplastic right heart syndrome",
+                definition: "A congenital heart disease characterized by underdevelopment of the structures on the right side of the heart commonly associated with atrial septal defect.",
+                symptoms: "Cold clammy skin, cyanosis, drowsiness, lethargy",
+            },
+            {
+                name: "Multiple types of congenital heart defects",
+                definition: "A congenital heart disease that is characterized by a congenital cardiac malformation characterized by atrioventricular concordance and ventriculoarterial discordance and that has_material_basis_in heterozygous mutation in the GDF1 gene on chromosome 19p13.",
+                symptoms: "",
+            },
+            {
+                name: "Scimitar syndrome",
+                definition: "A congenital heart disease that is characterized by partial or entire anomalous curved venous  drainage of the right lung to the inferior vena cava, association with variable right lung and pulmonary artery hypoplasia, dextraposition of the heart and an anomalous systemic blood supply to the ipsilateral lung.",
+                symptoms: "Breathing problem, cyanosis, dyspnea, limb edema, rapid repiration, retinal edema",
+            },
+            {
+                name: "Congestive heart failure",
+                definition: "A heart disease that is characterized by any structural or functional cardiac disorder that impairs the ability of the heart to fill with or pump a sufficient amount of blood throughout the body.",
+                symptoms: "heart failure",
+            },
+            {
+                name: "Cor pulmonale",
+                definition: "A congestive heart failure that involves a failure of the right side of the heart and is characterized by an enlargement of the right ventricle of the heart as a response to increased resistance or high blood pressure in the lungs.",
+                symptoms: "heart failure",
+            },
+            {
+                name: "Primary pulmonary hypertension",
+                definition: "A chronic pulmonary heart disease characterized by an increase of blood pressure in the pulmonary artery, pulmonary vein, or pulmonary capillaries, among others, has symptoms shortness of breath, dizziness, fainting, leg swelling.",
+                symptoms: "dizziness, dyspnea, leg swelling, syncope",
+            },
+            {
+                name: "Cardiac arrest",
+                definition: "A congestive heart failure characterized by a sudden stop in effective blood circulation due to the failure of the heart to contract effectively or at all.",
+                symptoms: "dizziness, heart failure, lightheadedness, loss of consciousness",
+            },
+            {
+                name: "Cystic echinococcosis",
+                definition: "An echinococcosis that is caused by the larvae of Echinococcus granulosus. Hepatic involvement can result in abdominal pain, a mass in the hepatic area, and biliary duct obstruction. Pulmonary involvement can produce chest pain, cough, and hemoptysis. Rupture of the cysts produce fever, urticaria, eosinophilia, and anaphylactic shock, as well as cyst dissemination. Brain, bone, heart can also be infected.",
+                symptoms: "Abdominal mass, anaphylactic shock, cough, hemoptysis, shock, urticaria",
+            },
+            {
+                name: "Cysticercosis",
+                definition: "A taeniasis that results from ingestion of eggs or larvae of the Taenia solium tapeworm in undercooked pork or fecally contaminated food or water, which subsequently infect the central nervous system, heart, muscles, subcutaneous tissues, and eyes. Neurocysticercosis causes seizures, mental disturbances, focal neurologic deficits and intracerebral lesions.",
+                symptoms: "Fever, inflammation",
+            },
+            {
+                name: "Endocardial fibroelastosis",
+                definition: "An endocardium disease that is characterized by a thickening of the inmost lining of the heart chambers due to an increase in the amount of supporting connective tissue and elastic fibers.",
+                symptoms: "Heart failure",
+            },
+            {
+                name: "Endocarditis",
+                definition: "A endocardium disease characterized by inflammation of the endocardium of the heart chambers and valves.",
+                symptoms: "Inflammation",
+            },
+            {
+                name: "Nonbacterial thrombotic endocarditis",
+                definition: "An endocarditis that results from the deposition of small sterile vegetations on valve leaflets.",
+                symptoms: "Endocarditis",
+            },
+            {
+                name: "Brugada syndrome",
+                definition: "A heart conduction disease that is characterized by abnormal electrocardiogram (ECG) findings and an increased risk of sudden cardiac death.",
+                symptoms: "Dizziness, dyspnea, loss of consciousness, seizure",
+            },
+            {
+                name: "Familial atrial fibrillation",
+                definition: "An atrial fibrillation that has_material_basis_in autosomal dominant inheritance of the familial atrial fibrillation (ATFB) genes.",
+                symptoms: "Atrial fibrillation",
+            },
+            {
+                name: "Congenital heart block",
+                definition: "An atrioventricular block characterized by the presence of conduction system disease of any form, which is diagnosed on or before 28 days of life.",
+                symptoms: "Bradycardia",
+            },
+            {
+                name: "Third-degree atrioventricular block",
+                definition: "An atrioventricular block that is characterized by bradycardia, hypotension, hemodynamic instability and complete dissociation between P waves and QRS complexes on electrocardiogram caused when conduction fails to propagate from atria to ventricles.",
+                symptoms: "Arrhythmia, cardiac arrest, dizziness, loss of consciousness, tiredness",
+            },
+            {
+                name: "Catecholaminergic polymorphic ventricular tachycardia",
+                definition: "A heart conduction disease characterized by adrenergically induced ventricular tachycardia manifesting as syncope and sudden death during exercise, stress or catecholamine infusion without the presence of structural cardiac abnormalities.",
+                symptoms: "Loss of consciousness, palpitation, seizure, syncope, ventrivular tachycardia",
+            },
+            {
+                name: "Postural orthostatic tachycardia syndrome",
+                definition: "A heart conduction disease characterized by orthostatic intolerance that has_material_basis_in heterozygous mutation in the SLC6A2 gene on chromosome 16q12.2.",
+                symptoms: "Anxiety, bloating, chest pain, concentration difficulty, dyspnea, extreme fatigue, headache, lighteadedness, loss of consciousness, nausea, palpitation, sweaty, vomiting",
+            },
+            {
+                name: "Progressive familial heart block",
+                definition: "A heart conduction disease characterized by autosomal dominant inheritance of a cardiac conduction defect that may progress to complete atrioventricular (AV) block and maybe asymptomatic of manifest as shortness of breath, dizziness, syncope, abdominal pain, heart failure or sudden death.",
+                symptoms: "Abdominal pain, dizziness, dyspnea, heart failure, syncope",
+            },
+            {
+                name: "Short QT syndrome",
+                definition: "A heart conduction disease that is characterized by heart arrhythmia defined as a short QT interval on an EKG (less than 300 ms) that does not significantly change with heart rate, tall and peaked T waves, and a structurally normal heart.",
+                symptoms: "Arrhythmia, atrial fibrillation, palpitation, syncope, ventricular fibrillation, ventricular tachycardia",
+            },
+            {
+                name: "Epicardium lipoma",
+                definition: "A heart lipoma that is located_in the epicardium and derives_from fat cells.",
+                symptoms: "Arrhythmia, cyanosis, dizziness, loss of consciousness",
+            },
+            {
+                name: "Atrioventricular septal defect",
+                definition: "A congenital heart septal defect characterized by an abnormal or inadequate fusion of the superior and inferior endocardial cushions with the mid portion of the atrial septum and the muscular portion of the ventricular septum, thus allowing extra blood to circulate the lungs.",
+                symptoms: "Cyanosis, dyspnea, rapid respiration",
+            },
+            {
+                name: "Ventricular septal defect",
+                definition: "A heart septal defect characterized by an opening in the interventricular septum, causing a shunt between ventricles.",
+                symptoms: "Clubbing of fingers, cyanosis, fatigue, growth delay, repiratory syncytical virus infectious disease, tachycardia, tachypnea, undiagnosed cardiac murmur, weight loss",
+            },
+            {
+                name: "Heart valve disease",
+                definition: "A heart disease involving one or more of the four valves of the heart (the aortic and mitral valves on the left and the pulmonary and tricuspid valves on the right).",
+                symptoms: "palpitation",
+            },
+            {
+                name: "X-linked cardiac valvular dysplasia",
+                definition: "A heart valve disease characterized by multivalvular dysplasia and regurgitation with more severe phenotypes in hemizygous males compared to heterozygous females that has_material_basis_in mutation in FLNA on chromosome Xq28.",
+                symptoms: "Aortic valve prolapse, chest pain, dizziness, dyspnea, mitral valve prolapse",
+            },
+            {
+                name: "Bicuspid aortic valve disease",
+                definition: "An aortic valve disease that is characterized by the presence of abnormal two-leaflet aortic valve in at least 2 first-degree relatives.",
+                symptoms: "Aortic aneurysm, aortic valve stenosis, chest discomfort, dyspnea, fatigue, hypertension, infective endocarditis, palpitation, syncope",
+            },
+            {
+                name: "Aortic valve insufficiency",
+                definition: "An aortic valve disease that is characterized by leaking of the aortic valve of the heart causes blood to flow in the reverse direction during ventricular diastole, from the aorta into the left ventricle.",
+                symptoms: "Bradycardia, chest discomfort, chest pain, fatigue, Lodwig's angine, palpitation, pulmonary edema, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Aortic valve stenosis",
+                definition: "An aortic valve disease that is characterized by narrowing of the heart's aortic valve opening.",
+                symptoms: "Dyspnea, fatigue, syncope",
+            },
+            {
+                name: "Supravalvular aortic stenosis",
+                definition: "An aortic valve stenosis that is characterized by a narrowing of the section of the aorta just above the valve that connects the aorta to the heart.",
+                symptoms: "Chest pain, dyspnea, high blood pressure, palpitation, syncope, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Mitral valve prolapse",
+                definition: "A mitral valve disease where one or both of the cusps of the mitral valve bulge or collapse backward in the left atrium during systole.",
+                symptoms: "Anxiety, chest discomfort, dizziness, dyspnea, fatigue, headache, lightheadedness, palpitation, panic disorder",
+            },
+            {
+                name: "Mitral valve stenosis",
+                definition: "A mitral valve disease that is characterized by the narrowing of the orifice of the mitral valve of the heart.",
+                symptoms: "Atrial fibrillation, chest discomfort, dyspnea, fatigue, undiagnosed cardiac murmur, mitral stenosis",
+            },
+            {
+                name: "Pulmonary valve insufficiency",
+                definition: "A pulmonary valve disease that occurs when the pulmonary valve is not strong enough to prevent backflow into the right ventricle. If it is secondary to pulmonary hypertension it is referred to as a Graham Steell murmur.",
+                symptoms: "Ascites, cynosis, dyspnea, edema, fatigue, hepatomegaly, palpitation, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Rheumatic heart disease",
+                definition: "A heart valve disease that is characterized by repeated inflammation with fibrinous repair caused by an autoimmune reaction to Group A beta-hemolytic streptococci (GAS) that results in valvular damage. The cardinal anatomic changes of the valve include leaflet thickening, commissural fusion, and shortening and thickening of the tendinous cords.",
+                symptoms: "Atrial fibrillation, cyanosis, edema, fatigue, heart failure, inflammation, mitral valve prolapse, palpitation, pulmonary hypertension, rheumatic fever, syncope, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Tricuspid valve disease",
+                definition: "A heart valve disease that is characterized by valvular insufficiency or valvular stenosis, located_in tricuspid valve between the right atrium and right ventricle.",
+                symptoms: "Ascites, cyanosis, edema, fatigue, palpitation, syncope, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Tricuspid atresia",
+                definition: "A tricuspid valve disease characterized by a missing or abnormally developed tricuspid heart value at birth.",
+                symptoms: "Clubbing of fingers, cyanosis, fatigue, growth delay, hepatomegaly, polycythemia, syncope, tachypnea, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Ebstein anomaly",
+                definition: "A tricuspid valve disease that is a congenital heart defect in which the septal leaflet of the tricuspid valve is displaced towards the apex of the right ventricle of the heart.",
+                symptoms: "Arrhythmia, breathing problems, clubbing of fingers, cyanosis, fatigue, hepatomegaly, palpitation, polycythemia, right bundle branch block, syncope, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Tricuspid valve insufficiency",
+                definition: "A tricuspid valve disease that is characterized by failure of the heart's tricuspid valve to close properly during systole. As a result, with each heart beat, blood is pumped out from the right side of the heart in the opposite direction to normal.",
+                symptoms: "Ascites, cyanosis, dyspnea, edema, heart faiure, hepatomegaly, syncope, tricuspid valve prolapse, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Tricuspid valve stenosis",
+                definition: "A tricuspid valve disease that is characterized by the narrowing of the orifice of the tricuspid valve of the heart. This causes increased resistance to blood flow through the valve.",
+                symptoms: "Ascites, dyspnea, edema, endocarditis, fatigue, hepatomegaly, palpitation, syncope, undiagnosed cardiac murmur, Endocardial fibrosis, Mitral stenosis",
+            },
+            {
+                name: "Heterophyiasis",
+                definition: "A parasitic helminthiasis infectious disease that involves intestinal infection by the parasite of the genus Heterophyes. The symptoms are diarrhea and colicky abdominal pain. Migration of the eggs to the heart, results in fatal myocardial and valvular damage. Brain can also be infected.",
+                symptoms: "Abdominal pain, ascites, diarrhea, dyspnea, edema, palpitation, undiagnosed cardiac murmur",
+            },
+            {
+                name: "Hypertensive heart disease",
+                definition: "A heart disease that is caused by high blood pressure.",
+                symptoms: "Arrhythmia, arthrogryposis, renal dysfunction, and cholestasis 1, chest pain, edema, fatigue, heart faiure, high blood pressure, myocardial infarction, orthopnea, palpitation, paroxysmal nocturnal hemoglobinuria",
+            },
+            {
+                name: "Toxocariasis",
+                definition: "A parasitic helminthiasis infectious disease that involves zoonotic infection of humans by the larvae of Toxocara canis or Toxocara cati. The larvae invade multiple tissues like liver, heart, lungs, brain, muscle and eyes causing various symptoms including fever, anorexia, weight loss, cough, wheezing, rashes, hepatosplenomegaly, hypereosinophilia and ophthalmologic lesions.",
+                symptoms: "Anorexia, breathing problems, cough, Eosinophilia, fatigue, fever, hepatomegaly, hepatosplenomegaly, lymphadenopathy, rash, splenomegaly, weight loss, wheezing",
+            },
+            {
+                name: "Transthyretin amyloidosis",
+                definition: "An amyloidosis that is characterized by a loss of sensation in the extremities, cardiomyopathy, nephropathy, vitreous opacities, and CNS amyloidosis resulting from abnormal deposits of amyloid protein in the body's organs and tissues and has_material_basis_in autosomal dominant inheritance of mutations in the TTR gene.",
+                symptoms: "Abdominal pain, amyloidosis, arrhythmia, cardiomyopathy, constipation, diarrhea, edema, heart failur, hoarseness, joint pain, malabsorption, motor peripheral neuropathy, nausea, syncope, vomiting, weight loss",
+            },
+            {
+                name: "Ventricular septal defect",
+                definition: "A heart septal defect characterized by an opening in the interventricular septum, causing a shunt between ventricles.",
+                symptoms: "Clubbing of fingers, cyanosis, fatigue, growth delay, respiratory syncytial virus infectious disease, tachycardia, tachypnea, undiagnosed cardiac murmur, weight loss",
+            },
+        ];
+
+    function generateDiseaseBoxHTML(data) {
+        return `
+            <li class="disease-box" data-disease="${data.name.toLowerCase().replace(/\s/g, '-')}">
+                ${data.name}
+                <div class="popup-box" id="popup-${data.name.toLowerCase().replace(/\s/g, '-')}">
+                    <span class="popup-close" data-disease="${data.name.toLowerCase().replace(/\s/g, '-')}">&times;</span>
+                    <p><strong>Name:</strong> ${data.name}</p>
+                    <p><strong>Definition:</strong> ${data.definition}</p>
+                    <p><strong>Symptoms:</strong> ${data.symptoms}</p>
+                </div>
+            </li>
+        `;
+    }
+
+
+        // Variable to track the currently open pop-up
+        let currentOpenPopup = null;
+
+        // Function to open the pop-up for a disease
+        function openPopup(disease) {
+            // Close the currently open pop-up if one exists
+            if (currentOpenPopup) {
+                closePopup(currentOpenPopup);
+            }
+
+            const popup = document.getElementById(`popup-${disease}`);
+            popup.style.display = "block";
+            currentOpenPopup = disease;
+        }
+
+        // Function to close the pop-up for a disease
+        function closePopup(disease) {
+            const popup = document.getElementById(`popup-${disease}`);
+            popup.style.display = "none";
+            currentOpenPopup = null;
+        }
+
+        // Function to toggle the pop-up when clicking on a disease box
+        function togglePopup(disease) {
+            const popup = document.getElementById(`popup-${disease}`);
+            if (popup.style.display === "block") {
+                closePopup(disease);
+            } else {
+                openPopup(disease);
+            }
+        }
+
+        
+
+        // Add click event listeners to close buttons in pop-up boxes
+        const closeButtons = document.querySelectorAll(".popup-close");
+        closeButtons.forEach(button => {
+            const disease = button.getAttribute("data-disease");
+            button.addEventListener("click", () => closePopup(disease));
+        });
+
+        // Generate and display disease boxes based on the data
+        const diseaseTypesList = document.getElementById('disease-types-list');
+        diseasesData.forEach(data => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = generateDiseaseBoxHTML(data);
+            diseaseTypesList.appendChild(listItem);
+        });
+
+        // Add click event listeners to disease boxes to toggle pop-up boxes
+        const diseaseBoxes = document.querySelectorAll(".disease-box");
+        diseaseBoxes.forEach(box => {
+            const disease = box.getAttribute("data-disease");
+            box.addEventListener("click", () => togglePopup(disease));
+        });
+
+
+        // Close pop-up boxes when clicking anywhere outside of them
+        document.addEventListener("click", event => {
+            if (event.target.classList.contains("popup-box")) {
+                event.target.style.display = "none";
+                const disease = event.target.getAttribute("data-disease");
+                closePopup(disease);
+            }
+        });
+</script>
+
+</body>
+</html>
+

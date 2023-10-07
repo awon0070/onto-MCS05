@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="real_main.css">
+    
+    <title>About Us - Ontology for Heart Disease</title>
+
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Align items horizontally */
+            align-items: center; /* Align items vertically */
+            background: #ffeaea;
+        }
+        
+        .navbar ul {
+            list-style-type: none;
+            background: #ffeaea;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        
+        .navbar li {
+            margin-right: 15px;
+            margin: 0 10px; /* Add margin to separate links */
+        }
+    
+        .navbar a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            display: block;
+            padding: 25px 0; /* Adjusted padding for center alignment */
+            font-size: 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+            width: 100%; /* Added this line to make links full width */
+        }
+        
+        /* Position the Sign In link at the right */
+        .navbar .signin-link {
+            margin-right: 20px; 
+        }
+        
+        .aboutus-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            background-color: #ffeaea; /* Set your desired background color */
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="real_main.html" target="_top">Home</a></li>
+            <li><a href="javascript:void(0);" onclick="checkAccess()" target="_top">Patients Medical Records</a></li>
+            <!-- <li><a href="chatbotUI.html" target="_top">Chat</a></li> -->
+            <li><a href="heart_disease_info.html" target="_top">Heart Disease Info</a></li>
+            <li><a href="aboutUs.html" target="_top">About Us</a></li>
+        </ul>
+        <div class="signin-link">
+            <a href="sign_in.html" target="_top">Sign In</a>
+    </div>
+        
+    </div>
+
+    <div id="myModal" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-red"> 
+                <span onclick="closeModal()" class="w3-button-close w3-display-topright">&times;</span>
+                <h3>Access Restricted</h3>
+            </header>
+            <div class="w3-container">
+                <p>Access to the patient's record is presently restricted due to the absence of a signed-in session. Authorization to view the record necessitates an active. <a href="sign_in.html" style="color: blue; text-decoration: underline;">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Content -->
+    <div class="aboutus-page">
+    <div class="w3-row-padding w3-padding-64 w3-container">
+        <div class="w3-content">            
+            <h1>Team MCS05</h1>
+            <h2>Our Project Team: </h2>
+            
+            <!-- Team Member 1 -->
+            <div class="w3-card w3-padding-16">
+                <h3>Wong Jia Xian</h3>
+                <p>Project Manager</p>
+                <p>To ensure the successful completion of the project and oversee the people performing work on the projects.</p>
+                <p>Email: <a href="mailto:jwon0070@student.monash.edu">jwon0070@student.monash.edu</a></p>
+            </div>
+            
+            <!-- Team Member 2 -->
+            <div class="w3-card w3-padding-16">
+                <h3>Austin Sing Jet Wong</h3>
+                <p>Technical Lead</p>
+                <p>Taking charge of the technical team because he is more technically inclined.</p>
+                <p>Email: <a href="mailto:awon0070@student.monash.edu">awon0070@student.monash.edu</a></p>
+            </div>
+            
+            <!-- Team Member 3 -->
+            <div class="w3-card w3-padding-16">
+                <h3>Teh Winnie</h3>
+                <p>Quality Assurance</p>
+                <p>Responsible for utilizing our resources efficiently and effectively.</p>
+                <p>Email: <a href="mailto:wteh0007@student.monash.edu">wteh0007@student.monash.edu</a></p>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

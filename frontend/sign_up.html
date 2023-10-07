@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="real_main.css">
+    <style>
+        .signup-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffeaea; /* Set your desired background color */
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .signup-container {
+            text-align: center;
+            max-width: 300px; /* Adjust this value as needed */
+            margin: 0 auto; /* Center the container horizontally */
+        }
+
+        .signup-container button {
+            font-size: 1em;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-row label {
+            flex-basis: 30%;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .form-row select,
+        .form-row input {
+            flex-basis: 65%;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.querySelector('form');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordInput = document.getElementById('signupPassword');
+            const passwordError = document.getElementById('passwordError');
+
+            signupForm.addEventListener('submit', function(event) {
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    event.preventDefault();
+                    passwordError.textContent = 'Passwords do not match.';
+                }
+            });
+
+            confirmPasswordInput.addEventListener('input', function() {
+                if (passwordInput.value === confirmPasswordInput.value) {
+                    passwordError.textContent = '';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="signup-page">
+        <div class="signup-container">
+            <h1>Sign Up</h1>
+            <form action="sign_up.php" method="POST">
+                <div class="form-row">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-row">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-row">
+                    <label for="doctorID">Doctor ID:</label>
+                    <input type="text" id="doctorID" name="doctorID" required>
+                </div>
+                <div class="form-row">
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required>
+                </div>
+                <div class="form-row">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-row">
+                    <label for="specialization">Specialization:</label>
+                    <select id="specialization" name="specialization">
+                        <option value="specialty1">Heart</option>
+                        <option value="specialty2">Brain</option>
+                    </select>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>

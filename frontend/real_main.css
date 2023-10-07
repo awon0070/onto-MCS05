@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    background: #ffd1e4;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.navbar li {
+    display: inline-block;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    width: 150px;
+    display: block;
+    padding: 25px 25px;
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    background: #ffd1e4;
+}
+
+/* Flexbox styles for search bar */
+.w3-flex {
+    display: flex;
+    align-items: center;
+}
+
+.w3-flex input,
+.w3-flex button {
+    margin: 5px;
+}
+
+/* Additional styles for the search bar */
+.w3-flex input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.w3-flex button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.w3-flex button:hover {
+    background-color: #333;
+}
+
+.w3-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.w3-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px; /* Adjust as needed */
+}
+
+
+/* Style for the circular close button */
+.w3-button-close {
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%; /* Make the button circular */
+    width: 30px; /* Adjust the width and height for your desired size */
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red; /* Set initial symbol color to red */
+}
+
+.w3-button-close:hover {
+    background-color: red; /* Change background color to red on hover */
+    color: white; /* Change symbol color to white on hover */
+}
+
+
+/* Custom style for the first grid */
+.custom-first-grid {
+    background-color: #fcdce9; 
+}
+
+/* Custom style for the second grid */
+.custom-second-grid {
+    background-color: #ffeaea; 
+}
+
+
+.w3-card {
+    background-color: #fcdce9;
+    padding: 16px;
+    margin: 16px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.w3-card h3 {
+    margin-top: 0;
+}
+
+
+  
