@@ -1,8 +1,8 @@
 const http = require("http");
 const fs = require('fs').promises;
 const host = '0.0.0.0';
-const localhost = 'localhost';
-const port = process.env.PORT || 8000;
+const localhost = '10.156.90.225';
+const port =  8000;
 
 const requestListener = function (req, res) {
     fs.readFile(__dirname + "/index.html")
@@ -21,7 +21,7 @@ const requestListener = function (req, res) {
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
-    console.log(`Server is running on http://${host}:${port}`);
+    console.log(`Server is running on http://${localhost}:${port}`);
 });
 
 

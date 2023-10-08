@@ -6,21 +6,17 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.RDFS;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Scanner;
 public class findDisease {
-    public static void main(OntModel model) {
-        //get user input
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter symptom(s) (separated by ','): ");
-        String userInput = scanner.nextLine();
-        String[] symptoms = userInput.split(",");
-        scanner.close();
+    public static List<String[]> main(OntModel model,String Info) {
 
-        // Load your ontology model from a file or any other source
-        //Model model = FileManager.get().loadModel("file:///Users/Jia%20Xian%20Wong/Desktop/3162/MAVENJENA/doid(newest).owl");
+        String[] symptoms = Info.split(",");
+        List<String[]> output = new ArrayList<String[]>();
+        //scanner.close();
 
-        //creating queries for getting the IRI of all input symptoms
+
         String[] symptomIRIQuery = new String[symptoms.length];
         for (int i = 0; i < symptoms.length; i++ ) {
             //get IRI of symptoms
@@ -57,15 +53,23 @@ public class findDisease {
 
         //process symptoms IRI list into valid query string
         //symptoms = {"http://purl.obolibrary.org/obo/SYMP_0000537", "http://purl.obolibrary.org/obo/SYMP_0019153", "http://purl.obolibrary.org/obo/SYMP_0019177", "http://purl.obolibrary.org/obo/SYMP_0000539"};
-        for (int i = 0; i < symptomIRIQuery.length; i++ ){
+        try {
+            for (int i = 0; i < symptomIRIQuery.length; i++) {
 
-            symptomQuery += "?disease rdfs:subClassOf [ " +
-                    "    rdf:type owl:Restriction ; " +
-                    "    owl:onProperty do:RO_0002452 ; " +
-                    "    owl:someValuesFrom do:"+ symptomIRIQuery[i].substring(31) +
-                    "] . ";
+                symptomQuery += "?disease rdfs:subClassOf [ " +
+                        "    rdf:type owl:Restriction ; " +
+                        "    owl:onProperty do:RO_0002452 ; " +
+                        "    owl:someValuesFrom do:" + symptomIRIQuery[i].substring(31) +
+                        "] . ";
 
+            }
+        }catch(Exception e){
+
+            System.out.println("Invalid symptoms");
+            //output.add(["Invalid symptoms"]);
+            return(output);
         }
+
 
 
         //query to get the disease that have all the input symptoms
@@ -102,21 +106,44 @@ public class findDisease {
 
             //process the results
             while (results.hasNext()) {
+                String[] diseaseInfo = new String[2];
                 QuerySolution solution = results.nextSolution();
                 RDFNode disease = solution.get("disease");
-                System.out.println("Disease IRI: " + disease);
+
+                if(disease == null){
+                    System.out.println("No diseases with these symptoms");
+                    break;
+                }
+                //System.out.println("Disease IRI: " + disease);
+                diseaseInfo[1] = ("Disease IRI: " + disease);
+
+                //output.add("Disease IRI: " + disease);
+                //return(output);
 
                 Resource classResource = model.getResource(disease.toString());
                 Statement labelStatement = classResource.getProperty(RDFS.label);
 
                 if (labelStatement != null) {
                     String label = labelStatement.getString();
-                    System.out.println("Disease: " + label);
+                    //System.out.println("Disease: " + label);
+                    diseaseInfo[0] = ("Disease: " + label);
+                   // System.out.println(diseaseInfo[0]);
+                    //output.add("Disease: " + label);
+                    //return (output);
                 } else {
-                    System.out.println("Label not found for the class");
+                    //System.out.println("Label not found for the class");
+                    diseaseInfo[0] = "Label not found for the class";
+                    //output.add("Label not found for the class");
+                    return(output);
                 }
+                output.add(diseaseInfo);
+                System.out.println(diseaseInfo[0]);
+                System.out.println(diseaseInfo[1]);
             }
+
         }
 
+        System.out.println(output);
+        return output;
     }
 }

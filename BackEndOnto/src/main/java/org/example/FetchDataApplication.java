@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @SpringBootApplication
 @Import(CorsConfig.class)
 public class FetchDataApplication {
-
+    public static OntologyManager OM;
     public static void main(String[] args) {
-        OntologyManager OM = new OntologyManager();
+        OM = new OntologyManager();
         SpringApplication.run(FetchDataApplication.class, args);
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
@@ -35,20 +36,34 @@ public class FetchDataApplication {
     @RestController
     public static class DataController {
         @PostMapping("/api/saveData")
-        public ResponseEntity<Map<String, String>> saveData(@RequestBody TextData textData) {
+        public ResponseEntity<List<String[]>> saveData(@RequestBody TextData textData) {
             String text = textData.getText();
+            int number = textData.getNumber();
+            List<String[]> infoOutput;
             //Print the received data to the server console
-            System.out.println("Received data: " + textData);
+            if(number==1){
+                infoOutput= OM.findDisease(text);
+            }
+            if(number==0){
+                infoOutput = OM.findSymptom(text);
+            }
+            else {
+                // Handle other cases or errors if needed
+                return ResponseEntity.badRequest().build();
+            }
+            //System.out.println("Received data: " + textData);
             System.out.println("Received data: " + text);
+            System.out.println("Received number: " + number);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Data received and processed: " + text);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
+                    .body(infoOutput);
         }
 
         public static class TextData {
             private String text;
+            private int number; // Add a new field for the number
 
             public String getText() {
                 return text;
@@ -56,6 +71,14 @@ public class FetchDataApplication {
 
             public void setText(String text) {
                 this.text = text;
+            }
+
+            public int getNumber() {
+                return number;
+            }
+
+            public void setNumber(int number) {
+                this.number = number;
             }
         }
     }

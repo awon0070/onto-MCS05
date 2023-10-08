@@ -8,15 +8,29 @@ import org.apache.jena.vocabulary.RDFS;
 
 import java.util.Scanner;
 
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.ModelFactory;
+
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.vocabulary.RDFS;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class findSymptoms {
-    public static void main(OntModel model) {
+    public static List<String[]> main(OntModel model,String disease) {
+        List<String[]> output = new ArrayList<String[]>();
 
         //get user input
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a disease: ");
-        String disease = scanner.nextLine();
 
-        scanner.close();
 
 
         // Load the OWL file into an RDF model
@@ -26,7 +40,7 @@ public class findSymptoms {
 //        // Create an ontology model
 //        OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 //
-//        // Load the OntologyManager ontology (which includes imports)
+//        // Load the main ontology (which includes imports)
 //        String ontologyFilePath = "file:///Users/Jia%20Xian%20Wong/Desktop/3162/MAVENJENA/doid(newest).owl";
 //        model.read(ontologyFilePath);
 
@@ -34,8 +48,18 @@ public class findSymptoms {
         // Define the SPARQL query to retrieve the class IRI by its label
         //disease = "ankyrin-B-related cardiac arrhythmia";
         String diseaseIRI = "";
-
+        //String queryIRI = "";
         //query to get disease IRI
+//        try{
+//            queryIRI = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+//                    "SELECT ?class\n" +
+//                    "WHERE {\n" +
+//                    "  ?class rdfs:label \"" + disease + "\".\n" +
+//                    "}";
+//        }
+//        catch (Exception e){
+//                System.out.println("Invalid disease");
+//        }
         String queryIRI = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                 "SELECT ?class\n" +
                 "WHERE {\n" +
@@ -88,23 +112,36 @@ public class findSymptoms {
 
             // Process the results
             while (results.hasNext()) {
+                String[] symptomInfo = new String[2];
+
                 QuerySolution solution = results.nextSolution();
                 String relatedClass = solution.get("relatedClass").toString();
-                System.out.println("Symptom IRI: " + relatedClass);
+
+                symptomInfo[1] = "Symptom IRI: " + relatedClass;
+                //System.out.println("Symptom IRI: " + relatedClass);
 
                 Resource classResource = model.getResource(relatedClass);
                 Statement labelStatement = classResource.getProperty(RDFS.label);
 
                 if (labelStatement != null) {
                     String label = labelStatement.getString();
-                    System.out.println("Symptom: " + label);
+                    symptomInfo[0] = "Symptom: " + label;
+                    //System.out.println("Symptom: " + label);
                 } else {
                     System.out.println("Label not found for the class with IRI: " + relatedClass);
                 }
+                output.add(symptomInfo);
+                System.out.println(symptomInfo[0]);
+                System.out.println(symptomInfo[1]);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+        return output;
     }
 }
+
