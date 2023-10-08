@@ -108,6 +108,26 @@
         .popup-box ul {
             list-style-type: none;
         }
+        
+       
+        .w3-input {
+            height: 15px; 
+            width: 75%;
+            padding: 10px; 
+        }
+
+        
+        .w3-input[type="text"] {
+            font-size: 15px; 
+        }
+
+        
+        .w3-button {
+            padding: 10px 20px; 
+            font-size: 14px;
+            
+        }
+
     </style>
 </head>
 <body>
@@ -115,28 +135,13 @@
 <div class="navbar">
 <ul>
     <li><a href="real_main.html" target="_top">Home</a></li>
-    <li><a href="javascript:void(0);" onclick="checkAccess()" target="_top">Patients Medical Records</a></li>
-    <!-- <li><a href="chatbotUI.html" target="_top">Chat</a></li> -->
     <li><a href="heart_disease_info.html" target="_top">Heart Disease Info</a></li>
     <li><a href="aboutUs.html" target="_top">About Us</a></li>
 </ul>
-<div class="signin-link">
-    <a href="sign_in.html" target="_top">Sign In</a>
-</div>
 
 </div>
 
-<div id="myModal" class="w3-modal">
-<div class="w3-modal-content w3-animate-top w3-card-4">
-    <header class="w3-container w3-red"> 
-        <span onclick="closeModal()" class="w3-button-close w3-display-topright">&times;</span>
-        <h3>Access Restricted</h3>
-    </header>
-    <div class="w3-container">
-        <p>Access to the patient's record is presently restricted due to the absence of a signed-in session. Authorization to view the record necessitates an active. <a href="sign_in.html" style="color: blue; text-decoration: underline;">Sign In</a></p>
-    </div>
-</div>
-</div>
+
 
 <!-- Search Bar and Disease Types -->
 <div class="info-page">
@@ -144,9 +149,15 @@
         <div class="w3-content">
             <div class="w3-twothird">
                 <h1>Heart Disease Information</h1>
-                <p>Search for a type of heart disease or symptom:</p>
-                <form class="w3-container" id="search-form">
-                    <input class="w3-input w3-border" type="text" placeholder="Search..." id="search-input">
+                <p>Enter Heart Disease:</p>
+                <form class="w3-container" id="search-form-symptom">
+                    <input class="w3-input w3-border" type="text" placeholder="Example: atrial heart septal defect" id="search-input-symptom">
+                    <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
+                </form>
+                <div style="height: 20px;"></div>
+                <p>Enter Symptoms:</p>
+                <form class="w3-container" id="search-form-disease">
+                    <input class="w3-input w3-border" type="text" placeholder="Example: cyanosis,dyspnea" id="search-input-disease">
                     <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
                 </form>
                 <h2>Heart Disease Types</h2>
@@ -158,27 +169,29 @@
     </div>
 </div>
 
+<script>
+    // Function to validate the search input
+    function validateSearchInput(formId, inputId) {
+        const form = document.getElementById(formId);
+        const input = document.getElementById(inputId);
+
+        form.addEventListener('submit', function (e) {
+            if (input.value.trim() === '') {
+                e.preventDefault(); // Prevent form submission
+                alert('Please enter a search term.'); // Display error message
+            }
+        });
+    }
+
+    // Call the function for both search forms
+    validateSearchInput('search-form-symptom', 'search-input-symptom');
+    validateSearchInput('search-form-disease', 'search-input-disease');
+</script>
+
+
 
 <!-- JavaScript -->
 <script>
-    // Fetch disease types from the .owl file and populate the list
-    fetch('disease-types.owl')
-        .then(response => response.text())
-        .then(data => {
-            const diseaseTypesList = document.getElementById('disease-types-list');
-            const diseaseTypes = data.split('\n').filter(type => type.trim() !== '');
-            
-            diseaseTypes.forEach(type => {
-                const listItem = document.createElement('li');
-                listItem.textContent = type;
-                listItem.classList.add('disease-link');
-                listItem.dataset.disease = type.toLowerCase().replace(/\s/g, '-');
-                listItem.addEventListener('click', handleDiseaseClick);
-                diseaseTypesList.appendChild(listItem);
-            });
-        })
-        .catch(error => console.error('Error fetching disease types:', error));
-
     // Handle disease type click
     function handleDiseaseClick(event) {
         const selectedDisease = event.target.dataset.disease;

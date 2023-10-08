@@ -81,30 +81,7 @@
             margin: 0;
         }
 
-    </style>
-
-<script>
-    function openModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "block";
-    }
-
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-    function checkAccess() {
-            var userLoggedIn = false; // Replace with your actual user authentication logic
-            if (!userLoggedIn) {
-                openModal();
-            } else {
-                // User is logged in, navigate to Patients Medical Records
-                window.location.href = "patients_medical_records.html";
-            }
-        }
-</script>
-    
+    </style>    
     
     <title>Ontology for Heart Disease</title>
 </head>
@@ -113,27 +90,9 @@
     <div class="navbar">
         <ul>
             <li><a href="real_main.html" target="_top">Home</a></li>
-            <li><a href="javascript:void(0);" onclick="checkAccess()" target="_top">Patients Medical Records</a></li>
-            <!-- <li><a href="chatbotUI.html" target="_top">Chat</a></li> -->
             <li><a href="heart_disease_info.html" target="_top">Heart Disease Info</a></li>
             <li><a href="aboutUs.html" target="_top">About Us</a></li>
-        </ul>
-        <div class="signin-link">
-            <a href="sign_in.html" target="_top">Sign In</a>
-    </div>
-        
-    </div>
-
-    <div id="myModal" class="w3-modal">
-        <div class="w3-modal-content w3-animate-top w3-card-4">
-            <header class="w3-container w3-red"> 
-                <span onclick="closeModal()" class="w3-button-close w3-display-topright">&times;</span>
-                <h3>Access Restricted</h3>
-            </header>
-            <div class="w3-container">
-                <p>Access to the patient's record is presently restricted due to the absence of a signed-in session. Authorization to view the record necessitates an active. <a href="sign_in.html" style="color: blue; text-decoration: underline;">Sign In</a></p>
-            </div>
-        </div>
+        </ul>        
     </div>
     
     <!-- Custom header -->
@@ -141,52 +100,11 @@
         <i>Heart Disease Wiki</i>
         <p class="w3-xlarge">Presented By: Group MCS05</p>
     </header>
-
-    
 </body>
 
 
 
-<!-- First Grid -->
 <div class="w3-row-padding w3-padding-64 w3-container custom-first-grid">
-    <div class="w3-content">
-        <div class="w3-twothird w3-flex">
-            <div style="flex: 1;">
-                <h1>Quick Search</h1>
-                <h5 class="w3-padding-32" style="text-align:justify; margin-top: -30px;">Let's search for it</h5>
-                
-                <!-- Adding the search bar -->
-                <form class="w3-container" action="/search" method="GET" onsubmit="return validateSearch()">
-                    <div class="w3-flex">
-                        <input class="w3-input w3-border" type="text" placeholder="Search..." name="search_query">
-                        <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
-                    </div>
-                </form>
-
-                <!-- Error message for empty search -->
-                <div id="error-message" class="w3-text-red" style="display: none;">Please enter a search query.</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function validateSearch() {
-        var searchQuery = document.querySelector('input[name="search_query"]').value;
-        var errorMessage = document.getElementById('error-message');
-    
-        if (searchQuery.trim() === '') {
-            errorMessage.style.display = 'block'; // Show the error message
-            return false; // Prevent form submission
-        } else {
-            errorMessage.style.display = 'none'; // Hide the error message if it's currently shown
-            return true; // Allow form submission
-        }
-    }
-</script>
-
-<!-- Second Grid -->
-<div class="w3-row-padding w3-padding-64 w3-container custom-second-grid">
     <div class="w3-content" style="display: flex; align-items: center; justify-content: space-between;">
         <div class="w3-twothird">
             <h1>Introduction to Ontology of Heart Disease</h1>
