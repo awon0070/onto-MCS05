@@ -12,7 +12,7 @@ import java.util.List;
 public class findDisease {
     public static List<String[]> main(OntModel model,String Info) {
 
-        String[] symptoms = Info.split(",");
+        String[] symptoms = Info.split("\\s*,\\s*");
         List<String[]> output = new ArrayList<String[]>();
         //scanner.close();
 

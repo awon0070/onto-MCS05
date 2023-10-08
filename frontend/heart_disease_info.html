@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Disease Info</title>
-    <link rel="stylesheet" href="real_main.css"> 
+    <link rel="stylesheet" href="/style.css"> 
     <style>
         
         .navbar {
@@ -151,13 +151,13 @@
                 <h1>Heart Disease Information</h1>
                 <p>Enter Heart Disease:</p>
                 <form class="w3-container" id="search-form-symptom">
-                    <input class="w3-input w3-border" type="text" placeholder="Example: atrial heart septal defect" id="search-input-symptom">
+                    <input class="w3-input w3-border" type="text" name="text" placeholder="Example: atrial heart septal defect" id="search-input-symptom">
                     <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
                 </form>
                 <div style="height: 20px;"></div>
                 <p>Enter Symptoms:</p>
                 <form class="w3-container" id="search-form-disease">
-                    <input class="w3-input w3-border" type="text" placeholder="Example: cyanosis,dyspnea" id="search-input-disease">
+                    <input class="w3-input w3-border" type="text" name="text" placeholder="Example: cyanosis, dyspnea" id="search-input-disease">
                     <button class="w3-button w3-black w3-margin-top" type="submit">Search</button>
                 </form>
                 <h2>Heart Disease Types</h2>
@@ -171,7 +171,8 @@
 
 <script>
     // Function to validate the search input
-    function validateSearchInput(formId, inputId) {
+    /*
+    function validateSearchInput(formId, inputId,x) {
         const form = document.getElementById(formId);
         const input = document.getElementById(inputId);
 
@@ -182,10 +183,49 @@
             }
         });
     }
+    */
+    function validateSearchInput( inputId,x)  {
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById(inputId);
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Access the form input value correctly
+        const text = form.text.value;
+        console.log(text);
+
+        const data = {
+            text: text,
+            number: x
+        };
+
+        // Convert the data object to JSON
+        const jsonString = JSON.stringify(data);
+
+        fetch('http://192.168.1.101:8080/api/saveData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: jsonString,
+            mode: 'cors',
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            console.log(typeof data.message);
+        })
+        .catch(error => {
+            //console.error('Error:', error);
+        });
+    });
+});};
+ 
 
     // Call the function for both search forms
-    validateSearchInput('search-form-symptom', 'search-input-symptom');
-    validateSearchInput('search-form-disease', 'search-input-disease');
+     validateSearchInput('search-form-symptom', 0);
+    validateSearchInput('search-form-disease', 1);
 </script>
 
 

@@ -1,7 +1,7 @@
 const http = require("http");
 const fs = require('fs').promises;
 const host = '0.0.0.0';
-const localhost = '10.156.90.225';
+const localhost = '192.168.1.101';
 const port =  8000;
 
 const requestListener = function (req, res) {

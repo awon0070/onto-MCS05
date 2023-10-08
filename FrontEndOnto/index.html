@@ -111,11 +111,11 @@
                 const Text = df.text.value;
                 console.log(Text);
 
-                const str={text: df.text.value,number:0}
+                const str={text: df.text.value,number:1}
                 const jsonString = JSON.stringify(str);
                 console.log(str);
                 //console.log(typeof(str));
-                fetch('http://10.156.90.225:8080/api/saveData', {
+                fetch('http://192.168.1.101:8080/api/saveData', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

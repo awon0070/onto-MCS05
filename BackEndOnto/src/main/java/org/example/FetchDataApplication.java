@@ -44,7 +44,7 @@ public class FetchDataApplication {
             if(number==1){
                 infoOutput= OM.findDisease(text);
             }
-            if(number==0){
+            else if(number==0){
                 infoOutput = OM.findSymptom(text);
             }
             else {
