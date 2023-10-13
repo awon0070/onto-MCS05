@@ -115,7 +115,7 @@ public class findDisease {
                     break;
                 }
                 //System.out.println("Disease IRI: " + disease);
-                diseaseInfo[1] = ("Disease IRI: " + disease);
+                diseaseInfo[1] = ("" + disease);
 
                 //output.add("Disease IRI: " + disease);
                 //return(output);
@@ -126,7 +126,7 @@ public class findDisease {
                 if (labelStatement != null) {
                     String label = labelStatement.getString();
                     //System.out.println("Disease: " + label);
-                    diseaseInfo[0] = ("Disease: " + label);
+                    diseaseInfo[0] = (label);
                    // System.out.println(diseaseInfo[0]);
                     //output.add("Disease: " + label);
                     //return (output);

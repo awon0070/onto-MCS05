@@ -117,7 +117,7 @@ public class findSymptoms {
                 QuerySolution solution = results.nextSolution();
                 String relatedClass = solution.get("relatedClass").toString();
 
-                symptomInfo[1] = "Symptom IRI: " + relatedClass;
+                symptomInfo[1] = relatedClass;
                 //System.out.println("Symptom IRI: " + relatedClass);
 
                 Resource classResource = model.getResource(relatedClass);
@@ -125,7 +125,7 @@ public class findSymptoms {
 
                 if (labelStatement != null) {
                     String label = labelStatement.getString();
-                    symptomInfo[0] = "Symptom: " + label;
+                    symptomInfo[0] = label;
                     //System.out.println("Symptom: " + label);
                 } else {
                     System.out.println("Label not found for the class with IRI: " + relatedClass);
