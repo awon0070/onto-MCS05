@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Disease Info</title>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="/style.css"> 
     <style>
         
+        .custom-font-style {
+            font-family: 'Arial', sans-serif; /* Change the font family here */
+            font-size: 16px; /* Change the font size here */
+            font-weight: bold; /* Change the font weight (e.g., bold, normal) here */
+  /* Add more CSS styles as needed */
+        }
         .navbar {
             display: flex;
             justify-content: space-between; /* Align items horizontally */
@@ -204,15 +210,34 @@
       // Function to open the symptom pop-up
 function openSymptomPopup(results) {
   const symptomPopup = document.getElementById('symptom-popup');
+  symptomPopup.style.display = 'none';
+  const diseasePopup = document.getElementById('disease-popup');
+  diseasePopup.style.display = 'none';
   const symptomPopupContent = document.getElementById('symptom-popup-content');
 
   // Populate the pop-up content
-  symptomPopupContent.innerHTML = '';
-  results.forEach(result => {
+//   symptomPopupContent.innerHTML = '';
+//   results.forEach(result => {
+//     const symptomDiv = document.createElement('div');
+//     symptomDiv.textContent = `Symptom: ${result[0]}, Symptom IRI: ${result[1]}`;
+    
+//     symptomPopupContent.appendChild(symptomDiv);
+//   });
+    
+    symptomPopupContent.innerHTML = '';
+    results.forEach(result => {
     const symptomDiv = document.createElement('div');
-    symptomDiv.textContent = `Symptom: ${result[0]}, Symptom IRI: ${result[1]}`;
+    symptomDiv.innerHTML = `Symptom: ${result[0]}<br>Symptom IRI: ${result[1]}<br><br>`;
+    //symptomDiv.classList.add('custom-font-style');
     symptomPopupContent.appendChild(symptomDiv);
-  });
+    });
+
+    if (symptomPopupContent.innerHTML.trim() === '') {
+    // Output is blank, display an error message
+    const errorDiv = document.createElement('div');
+    errorDiv.textContent = "Invalid disease.";
+    symptomPopupContent.appendChild(errorDiv);
+    }
 
   // Set the max-height of the pop-up content
   
@@ -230,15 +255,25 @@ function closeSymptomPopup() {
 // Function to open the disease pop-up
 function openDiseasePopup(results) {
   const diseasePopup = document.getElementById('disease-popup');
+  diseasePopup.style.display = 'none';
+  const symptomPopup = document.getElementById('symptom-popup');
+  symptomPopup.style.display = 'none';
   const diseasePopupContent = document.getElementById('disease-popup-content');
 
   // Populate the pop-up content
   diseasePopupContent.innerHTML = '';
-  results.forEach(result => {
-    const diseaseDiv = document.createElement('div');
-    diseaseDiv.textContent = `Disease: ${result[0]}, Disease IRI: ${result[1]}`;
-    diseasePopupContent.appendChild(diseaseDiv);
-  });
+   results.forEach(result => {
+  const diseaseDiv = document.createElement('div');
+  diseaseDiv.innerHTML = `Disease: ${result[0]}<br>Disease IRI: ${result[1]}<br><br>`
+  diseasePopupContent.appendChild(diseaseDiv);
+});
+
+if (diseasePopupContent.innerHTML.trim() === '') {
+    // Output is blank, display an error message
+    const errorDiv = document.createElement('div');
+    errorDiv.textContent = "Invalid symptom(s).";
+    diseasePopupContent.appendChild(errorDiv);
+    }
 
   // Set the max-height of the pop-up content
  
@@ -271,7 +306,7 @@ function closeDiseasePopup() {
         // Convert the data object to JSON
         const jsonString = JSON.stringify(data);
 
-        fetch('http://192.168.1.101:8080/api/saveData', {
+        fetch('http://localhost:8080/api/saveData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

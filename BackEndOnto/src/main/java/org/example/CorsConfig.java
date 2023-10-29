@@ -14,7 +14,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         //http://10.156.90.225::${port}
-        config.addAllowedOrigin("http://192.168.1.101:8000"); // Corrected origin
+        config.addAllowedOrigin("http://localhost:8000"); // Corrected origin
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);

@@ -1,0 +1,7 @@
+org\example\FetchDataApplication.class
+org\example\CorsConfig.class
+org\example\OntologyManager.class
+org\example\findSymptoms.class
+org\example\FetchDataApplication$DataController$TextData.class
+org\example\findDisease.class
+org\example\FetchDataApplication$DataController.class

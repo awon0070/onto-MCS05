@@ -51,7 +51,7 @@ public class FetchDataApplication {
                 // Handle other cases or errors if needed
                 return ResponseEntity.badRequest().build();
             }
-            //System.out.println("Received data: " + textData);
+
             System.out.println("Received data: " + text);
             System.out.println("Received number: " + number);
             Map<String, String> response = new HashMap<>();
